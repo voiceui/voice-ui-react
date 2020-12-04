@@ -1,7 +1,7 @@
 {
   "name": "voiceui-react",
   "version": "1.0.0",
-  "description": "Voicebased controllfor react applications",
+  "description": "Voicebased control for react applications",
   "author": "hexad3cimal",
   "license": "MIT",
   "repository": "/voiceui/voiceui-react",
