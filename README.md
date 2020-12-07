@@ -27,7 +27,7 @@ class Example extends Component {
 ## Feature: Scroll to Section
 Command Pattern ``` * | go to | <section-id> | * ```
 Example: "Go to home" , "Please go to about section", "Go to services section please"
-# Usage
+## Usage
 ```jsx 
 import React from "react";
 import { VoiceContext } from "voiceui-react";
