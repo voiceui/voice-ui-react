@@ -10,6 +10,7 @@ function VoiceForm() {
   const servicesRef = useRef();
   useEffect(() => {
     voiceContext.setInputs(["username", "password", "login"]);
+    voiceContext.setOptions({restart:true});
     voiceContext.setScrollableSections([homeRef,aboutRef,servicesRef]);
   }, []);
 
