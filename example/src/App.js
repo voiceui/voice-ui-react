@@ -1,6 +1,5 @@
 import React from "react";
 import { Typography, Box } from "@material-ui/core";
-import { VoiceProvider } from "voiceui-react";
 import VoiceForm from "./VoiceForm";
 function App() {
   return (
@@ -14,9 +13,7 @@ function App() {
       <Typography variant="h4" component="h1">
         To set value say "set username [value] and set password [value]"
       </Typography>
-      <VoiceProvider>
         <VoiceForm />
-      </VoiceProvider>
     </Box>
   );
 }

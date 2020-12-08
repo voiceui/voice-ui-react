@@ -1,4 +1,4 @@
-import {ineractionTypes} from '../constants'
+import {interactionTypes} from '../constants'
 
 
 //get the matched word from input array based on transcript
@@ -18,10 +18,10 @@ export const getValue = (transcript, matchedWord) =>{
 
 //get the type of interaction
 export const getInteractionType = (transcript) =>{
-    for(let interactionType in ineractionTypes){
-        //for correct interaction it should start with words in ineractionTypes constant
-        if(transcript.startsWith(ineractionTypes[interactionType])){
-            return ineractionTypes[interactionType];
+    for(let interactionType in interactionTypes){
+        //for correct interaction it should start with words in interactionTypes constant
+        if(transcript.startsWith(interactionTypes[interactionType])){
+            return interactionTypes[interactionType];
         }
     }
     return null;
