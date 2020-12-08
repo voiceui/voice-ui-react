@@ -7,17 +7,18 @@ function VoiceForm() {
   const homeRef = useRef();
   const aboutRef = useRef();
   const servicesRef = useRef();
-
-  const result = useVoice({inputs :["username", "password", "login"], restart: true , sections:[homeRef,aboutRef,servicesRef]})
-
+  const result = useVoice({inputs :["username", "password", "login"], appendMode:true, restart:true, sections:[homeRef,aboutRef,servicesRef]})
 
   useEffect(() => {
-    if (result)
+    if (result){
+      const key = Object.keys(result)[0];
+      const value = result.append ? values[key] + result[key] : result[key];
       setValues({
-        [Object.keys(result)[0]]:
-          result[Object.keys(result)[0]],
+       [key]: value
       });
+    }
   }, [result]);
+
   return (
     <div className="App">
       <Box
