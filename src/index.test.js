@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import { useVoiceControl } from '.'
 
-describe('ExampleComponent', () => {
+describe('index test', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(useVoiceControl).toBeTruthy()
   })
 })

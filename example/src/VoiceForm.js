@@ -7,7 +7,7 @@ function VoiceForm() {
   const homeRef = useRef();
   const aboutRef = useRef();
   const servicesRef = useRef();
-  const result = useVoice({inputs :["username", "password", "login"], appendMode:true, restart:true, sections:[homeRef,aboutRef,servicesRef]})
+  const result = useVoice({inputs :["username", "password", "login"], restart:true, sections:[homeRef,aboutRef,servicesRef]})
 
   useEffect(() => {
     if (result){
@@ -17,7 +17,7 @@ function VoiceForm() {
        [key]: value
       });
     }
-  }, [result]);
+  }, [result, values]);
 
   return (
     <div className="App">
@@ -47,7 +47,7 @@ function VoiceForm() {
         </Container>
         <Container maxWidth="sm">
           <Typography ref={homeRef} id="home" component="div" style={{ backgroundColor: '#cfe8fc', height: '100vh' }} >
-            <h1>Home Section </h1> 
+            <h1>Home Section </h1>
             <h3>To scroll to this section say "go to home" / "please go to home section"
             Pattern for Scrolling: * | go to | section-id | * </h3>
         </Typography>
