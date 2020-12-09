@@ -1,1 +1,1 @@
-export * from './ineractionTypes'
+export * from './interactionTypes';

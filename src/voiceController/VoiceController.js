@@ -1,7 +1,6 @@
-import React, { createContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getInteractionType, getMatchedWord, getValue } from './utils'
-import { ineractionTypes } from './constants'
-export const VoiceContext = createContext()
+import { interactionTypes } from './constants'
 
 const SpeechRecognition =
   window.SpeechRecognition ||
@@ -20,35 +19,42 @@ if (SpeechRecognition) {
   recognition.maxAlternatives = 1
   recognition.start()
 }
-export const VoiceProvider = ({ children }) => {
+export const useVoice = (options) => {
   const [result, setResult] = useState(null);
-  const [inputs, setInputs] = useState([]);
-  const [ref, setRef] = useState(null);
   const [transcript, setTranscript] = useState('');
-  const [scrollableSections, setScrollableSections] = useState([]);
-  const [options, setOptions] = useState({restart:false});
-
-
+  const inputs = options.inputs;
+  const refs = options.refs;
+  const sectionRefs = options.sections;
+  let matchedRef;
+  let sectionRef;
   //to handle transcript changes
   useEffect(() => {
     const matchedWord = getMatchedWord(transcript, inputs)
     const interactionType = getInteractionType(transcript)
     if (
       (matchedWord && interactionType) ||
-      interactionType === ineractionTypes.NAVIGATE
+      interactionType === interactionTypes.NAVIGATE
     ) {
       switch (interactionType) {
-        case ineractionTypes.TEXT_INPUT:
+        case interactionTypes.TEXT_INPUT:
           setResult({ [matchedWord]: getValue(transcript, matchedWord) })
-        case ineractionTypes.CLICK:
-          ref && ref.current && ref.current.click()
-        case ineractionTypes.NAVIGATE:
-          let sectionRef = scrollableSections.find(
+          break;
+        case interactionTypes.CLICK:
+          if(matchedWord){
+            matchedRef = refs[matchedWord];
+            matchedRef && matchedRef.current && matchedRef.current.click()
+          }
+          break;
+        case interactionTypes.NAVIGATE:
+          sectionRef = sectionRefs.find(
             (sectionRef) =>
               sectionRef.current.id ===
-              getValue(transcript, ineractionTypes.NAVIGATE)
+              getValue(transcript, interactionTypes.NAVIGATE)
           )
           if (sectionRef !== undefined) smoothScroll(sectionRef.current, 1000)
+          break;
+        default:
+          break;
       }
     }
   }, [transcript])
@@ -95,17 +101,5 @@ export const VoiceProvider = ({ children }) => {
     requestAnimationFrame(animation)
   }
 
-  return (
-    <VoiceContext.Provider
-      value={{
-        result,
-        setInputs,
-        setRef,
-        setScrollableSections,
-        setOptions
-      }}
-    >
-      {children}
-    </VoiceContext.Provider>
-  )
+  return result;
 }

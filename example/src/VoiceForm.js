@@ -1,26 +1,24 @@
 import React from "react";
-import { VoiceContext } from "voiceui-react";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useVoice } from "voiceui-react";
+import { useEffect, useState, useRef } from "react";
 import { Container, TextField, Box, Typography } from "@material-ui/core";
 function VoiceForm() {
-  const voiceContext = useContext(VoiceContext);
   const [values, setValues] = useState({ username: "", password: "" });
   const homeRef = useRef();
   const aboutRef = useRef();
   const servicesRef = useRef();
-  useEffect(() => {
-    voiceContext.setInputs(["username", "password", "login"]);
-    voiceContext.setOptions({restart:true});
-    voiceContext.setScrollableSections([homeRef,aboutRef,servicesRef]);
-  }, []);
+  const result = useVoice({inputs :["username", "password", "login"], appendMode:true, restart:true, sections:[homeRef,aboutRef,servicesRef]})
 
   useEffect(() => {
-    if (voiceContext.result)
+    if (result){
+      const key = Object.keys(result)[0];
+      const value = result.append ? values[key] + result[key] : result[key];
       setValues({
-        [Object.keys(voiceContext.result)[0]]:
-          voiceContext.result[Object.keys(voiceContext.result)[0]],
+       [key]: value
       });
-  }, [voiceContext.result]);
+    }
+  }, [result]);
+
   return (
     <div className="App">
       <Box
