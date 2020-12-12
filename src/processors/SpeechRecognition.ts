@@ -1,10 +1,6 @@
-export const SpeechRecognitionManager = () => {
+export const GetSpeechRecognition = () => {
   const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition ||
-    window.mozSpeechRecognition ||
-    window.msSpeechRecognition ||
-    window.oSpeechRecognition
+    window.SpeechRecognition
 
   let speechRecognition
 
@@ -17,5 +13,5 @@ export const SpeechRecognitionManager = () => {
     return speechRecognition
   }
 
-  return null
+  return speechRecognition
 }
