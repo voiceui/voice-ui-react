@@ -1,7 +1,7 @@
 import React from "react";
-import Controller from "voiceui-react";
 import { useEffect, useState } from "react";
 import { Container, TextField, Box } from "@material-ui/core";
+import {SpeechControls, useVoiceControl} from "voiceui-react";
 type State =   {[key: string]: any}
 function VoiceForm() {
   function state(state : State) {
@@ -12,30 +12,24 @@ function VoiceForm() {
   const homeRef = React.useRef<HTMLElement>(null)
   const aboutRef = React.useRef<HTMLElement>(null)
   const servicesRef = React.useRef<HTMLElement>(null)
-  const voiceController = new Controller({formControls :["username", "password", "login"], restart:true, sectionRefs:[homeRef,aboutRef,servicesRef]})
 
-  const isVoiceRecognitionSupported = voiceController.voiceControlsSupported()
-  let result: Object = {};
-  useEffect(()=>{
-    console.log("isVoiceRecognitionSupported",isVoiceRecognitionSupported)
+  const speechControls = new SpeechControls();
+  const result = useVoiceControl(speechControls.getVoiceController(),{formControls :["username", "password", "login"], restart:true, sectionRefs:[homeRef,aboutRef,servicesRef]})
 
-    if(voiceController.startRecognition()){
-      result = voiceController.getVoiceController()
-      console.log("result",result)
-      setValues({username : true})
-
+  useEffect(() => {
+    if (result){
+      console.log(result)
+      const key = Object.keys(result)[0];
+      const value =result[key];
+      setValues({
+       [key]: value
+      });
     }
-  },[isVoiceRecognitionSupported])
-  // useEffect(() => {
-  //   if (result){
-  //     const key = Object.keys(result)[0];
-  //     const value =result[key];
-  //     setValues({
-  //      key: value
-  //     });
-  //   }
-  // }, [result]);
+  }, [result]);
 
+  useEffect(() => {
+    speechControls.startRecognition()
+  }, []);
   return (
     <div className="App">
       <Box

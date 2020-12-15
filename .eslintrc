@@ -28,12 +28,6 @@
     "react/prop-types": 0,
     "react/jsx-handler-names": 0,
     "react/jsx-fragments": 0,
-    "@typescript-eslint/no-unused-vars": [
-      2,
-      {
-        "args": "none"
-      }
-    ],
     "import/export": 0
   }
 }

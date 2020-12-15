@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react'
 import { controlTypes } from './constants'
+import { Options } from './types'
 import {
-  ExtractTheValueToBeSetFromTranscript,
-  GetControlTypeFromTranscript,
-  GetMatchedUtteranceFromTranscript,
-  Options} from './types'
+  extractTheValueToBeSetFromTranscript,
+  getControlTypeFromTranscript,
+  getMatchedUtteranceFromTranscript
+} from './processors'
 
-export const VoiceControl = (
-  options: Options,
-  speechRecognition: SpeechRecognition,
-  getControlTypeFromTranscript: GetControlTypeFromTranscript,
-  getMatchedUtteranceFromTranscript: GetMatchedUtteranceFromTranscript,
-  extractTheValueToBeSetFromTranscript: ExtractTheValueToBeSetFromTranscript
+export const useVoiceControl = (
+  speechRecognition: any,
+  options: Options
 ): Object => {
   const [result, setResult] = useState<Object | null>()
   const [transcript, setTranscript] = useState('')
@@ -20,6 +18,24 @@ export const VoiceControl = (
   const sectionRefs = options.sectionRefs || []
   let matchedRef
   let sectionRef
+
+  useEffect(() => {
+    // voice recognition functions
+    if (speechRecognition) {
+      speechRecognition.onresult = function (event: any) {
+        // this will trigger the process
+        setTranscript(event.results[event.resultIndex][0].transcript.trim())
+      }
+
+      speechRecognition.onend = function () {
+        // this will trigger if the options is set to restart
+        if (options.restart) {
+          speechRecognition.start()
+        }
+      }
+    }
+  }, [speechRecognition])
+
   // to handle transcript changes
   useEffect(() => {
     const matchedUtterance = getMatchedUtteranceFromTranscript(
@@ -33,8 +49,8 @@ export const VoiceControl = (
     ) {
       switch (controlType) {
         case controlTypes.TEXT_INPUT:
-          setResult(  {
-            matchedUtterance: extractTheValueToBeSetFromTranscript(
+          setResult({
+            [matchedUtterance]: extractTheValueToBeSetFromTranscript(
               transcript,
               matchedUtterance
             )
@@ -49,11 +65,12 @@ export const VoiceControl = (
         case controlTypes.NAVIGATE:
           sectionRef = sectionRefs!.find(
             (sectionRef) =>
-              sectionRef && sectionRef.current!.id ===
-              extractTheValueToBeSetFromTranscript(
-                transcript,
-                controlTypes.NAVIGATE
-              )
+              sectionRef &&
+              sectionRef.current!.id ===
+                extractTheValueToBeSetFromTranscript(
+                  transcript,
+                  controlTypes.NAVIGATE
+                )
           )
           if (sectionRef !== undefined) smoothScroll(sectionRef!.current!, 1000)
           break
@@ -63,35 +80,17 @@ export const VoiceControl = (
     }
   }, [transcript])
 
-  // voice recognition functions
-  if (speechRecognition) {
-    speechRecognition.onresult = function (event) {
-      // this will trigger the process
-      setTranscript(event.results[event.resultIndex][0].transcript.trim())
-    }
-
-    speechRecognition.onend = function () {
-      // this will trigger if the options is set to restart
-      if (options.restart) {
-        speechRecognition.start()
-      }
-    }
-  } else {
-    console.log(
-      '********** Your browser does not support SpeechRecognition *******'
-    )
-  }
-
-  const smoothScroll = (target : HTMLElement, duration: number) => {
-    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
-    const startPosition = window.pageYOffset;
-    const distance = targetPosition - startPosition;
-    let startTime: number | null = null;
+  const smoothScroll = (target: HTMLElement, duration: number) => {
+    const targetPosition =
+      target.getBoundingClientRect().top + window.pageYOffset
+    const startPosition = window.pageYOffset
+    const distance = targetPosition - startPosition
+    let startTime: number | null = null
 
     function animation(currentTime: number | null) {
       if (startTime === null) startTime = currentTime
-      const timeElapsed = currentTime! - startTime!;
-      const run = ease(timeElapsed, startPosition, distance, duration);
+      const timeElapsed = currentTime! - startTime!
+      const run = ease(timeElapsed, startPosition, distance, duration)
       window.scrollTo(0, run)
       if (timeElapsed < duration) requestAnimationFrame(animation)
     }
@@ -104,5 +103,5 @@ export const VoiceControl = (
     requestAnimationFrame(animation)
   }
 
-  return result || {}
+  return result!
 }

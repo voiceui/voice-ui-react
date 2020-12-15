@@ -1,7 +1,11 @@
+/* eslint dot-notation: ["warn"] */
 export const GetSpeechRecognition = () => {
   const SpeechRecognition =
-    window.SpeechRecognition
-
+    (window.SpeechRecognition ||
+      window['webkitSpeechRecognition'] ||
+      window['mozSpeechRecognition'] ||
+      window['msSpeechRecognition'] ||
+      window['oSpeechRecognition'])
   let speechRecognition
 
   if (SpeechRecognition) {

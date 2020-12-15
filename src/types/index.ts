@@ -1,22 +1,21 @@
 import React from 'react'
 
 export type Options = {
-  formControls?: Array<String>
+  formControls?: Array<string>
   sectionRefs?: Array<React.RefObject<HTMLElement>>
   formRefs?: Array<React.RefObject<HTMLElement>>
-  botName?: String
+  botName?: string
   restart?: Boolean
 }
 
-
 export type GetMatchedUtteranceFromTranscript = (
-  transcript: String,
-  formControlArray: Array<String>
+  transcript: string,
+  formControlArray: Array<string>
 ) => string
 
 export type ExtractTheValueToBeSetFromTranscript = (
-  transcript: String,
-  matchedWord: String
+  transcript: string,
+  matchedWord: string
 ) => string
 
-export type GetControlTypeFromTranscript = (transcript: String) => string | null
+export type GetControlTypeFromTranscript = (transcript: string) => string | null

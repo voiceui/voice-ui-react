@@ -2,7 +2,7 @@ import { controlTypes } from '../constants'
 
 // get the matched word from input array based on transcript
 export const getMatchedUtteranceFromTranscript = (
-  transcript: string,
+  transcript: String,
   formControlArray: Array<string>
 ): string => {
   const words =
@@ -15,7 +15,7 @@ export const getMatchedUtteranceFromTranscript = (
 
 // get the value that needs to be set for input fields
 export const extractTheValueToBeSetFromTranscript = (
-  transcript: string,
+  transcript: String,
   matchedWord: string
 ): string => {
   const value = transcript.split(matchedWord)
@@ -24,7 +24,7 @@ export const extractTheValueToBeSetFromTranscript = (
 
 // get the type of control
 export const getControlTypeFromTranscript = (
-  transcript: string
+  transcript: String
 ): string | null => {
   for (const controlType in controlTypes) {
     // for correct control it should start with words in controlTypes constant
